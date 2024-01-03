@@ -34,17 +34,18 @@ function addGamesToPage(games) {
         const gameCard = document.createElement('div');
     
         // add the class game-card to the list
-        gameCard.classList.add('.game-card');
-        // gameCard.classList.add('.game-card:hover')
+        gameCard.classList.add('game-card');
+        gameCard.classList.add('game-card:hover')
     
         // set the inner HTML using a template literal to display some info 
         // about each game
         // TIP: if your images are not displaying, make sure there is space
         // between the end of the src attribute and the end of the tag ("/>")
         gameCard.innerHTML = `
-            <h1>${game.name}</h1>
-            <p>${game.description}</p>
             <img src=${game.img} class="game-img">
+            <h1 class="game-name">${game.name}</h1>
+            <p>${game.description}</p>
+            <p> Backers: ${game.backers}</p>
             `
     
         // append the game to the games-container
@@ -68,19 +69,22 @@ addGamesToPage(GAMES_JSON);
 const contributionsCard = document.getElementById("num-contributions");
 
 // use reduce() to count the number of total contributions by summing the backers
-
+const totalContributions = GAMES_JSON.reduce( (accumulator, game) => accumulator + game.backers , 0);
 
 // set the inner HTML using a template literal and toLocaleString to get a number with commas
-
+contributionsCard.innerHTML = `<p>${totalContributions.toLocaleString('en-US')}</p>`
 
 // grab the amount raised card, then use reduce() to find the total amount raised
 const raisedCard = document.getElementById("total-raised");
+const totalRaised = GAMES_JSON.reduce( (accumulator, game) => accumulator + game.pledged, 0);
 
 // set inner HTML using template literal
-
+raisedCard.innerHTML = `<p>${totalRaised.toLocaleString('en-US')}</p>`
 
 // grab number of games card and set its inner HTML
 const gamesCard = document.getElementById("num-games");
+const totalGames = GAMES_JSON.reduce( (accumulator) => accumulator + 1 , 0);
+gamesCard.innerHTML = `<p>${totalGames}</p>`
 
 
 /*************************************************************************************
