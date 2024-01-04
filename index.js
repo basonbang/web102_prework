@@ -24,7 +24,7 @@ function deleteChildElements(parent) {
 
 // grab the element with the id games-container
 const gamesContainer = document.getElementById("games-container");
-
+const inputContainer = document.getElementById("input-container")
 // create a function that adds all data from the games array to the page
 function addGamesToPage(games) {
 
@@ -121,15 +121,44 @@ function showAllGames() {
     gamesContainer.append(...addGamesToPage(GAMES_JSON));
 }
 
+// filters a game
+function filterGames(specificGame){
+    return GAMES_JSON.filter( game => game.name.toLowerCase().includes(specificGame));
+}
+
+// show a specific game
+function showSpecificGame() {
+    deleteChildElements(inputContainer);
+    deleteChildElements(gamesContainer);
+
+    const inputField = document.createElement("input");
+    inputField.setAttribute('type', 'text');
+    inputField.setAttribute('id', 'input-field');
+    inputField.setAttribute('placeholder', 'Search for a game!')
+   
+    inputContainer.append(inputField);
+
+    inputField.addEventListener('input', (event) => {
+        deleteChildElements(gamesContainer)
+
+        const searchTerm = event.target.value;
+        const filteredGame = filterGames(searchTerm);
+        addGamesToPage(filteredGame)
+    })
+
+}
+
 // select each button in the "Our Games" section
 const unfundedBtn = document.getElementById("unfunded-btn");
 const fundedBtn = document.getElementById("funded-btn");
 const allBtn = document.getElementById("all-btn");
+const searchBtn = document.getElementById("search-btn");
 
 // add event listeners with the correct functions to each button
 unfundedBtn.addEventListener("click", filterUnfundedOnly);
 fundedBtn.addEventListener("click", filterFundedOnly);
-allBtn.addEventListener("click", showAllGames)
+allBtn.addEventListener("click", showAllGames);
+searchBtn.addEventListener("click", showSpecificGame);
 
 /*************************************************************************************
  * Challenge 6: Add more information at the top of the page about the company.
@@ -165,7 +194,14 @@ const sortedGames =  GAMES_JSON.sort( (item1, item2) => {
 });
 
 // use destructuring and the spread operator to grab the first and second games
+const [firstGame, secondGame, ...otherGames] = sortedGames
 
 // create a new element to hold the name of the top pledge game, then append it to the correct element
+const topG = document.createElement("p")
+topG.innerHTML = `${firstGame.name}`
+firstGameContainer.append(topG);
 
 // do the same for the runner up item
+const bottomG = document.createElement("p")
+bottomG.innerHTML = `${secondGame.name}`
+secondGameContainer.append(bottomG);
